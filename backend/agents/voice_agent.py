@@ -8,10 +8,9 @@ def voice_agent(script):
         # Create the TTS response
         response = client.audio.speech.create(
             model="gpt-4o-mini-tts",
-            voice="alloy",
+            voice="onyx",
             input=script
         )
-        
         audio_bytes = response.read() 
 
         path = "static/podcast.mp3"

@@ -8,7 +8,7 @@ def topic_router(topics):
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are a topic normalizer."},
+            {"role": "system", "content": "You are a topic normalizer, your job is to check a list for typos, duplicates, other inconsistencies, and send back a list of the cleaned topcis. Only send back the list of topics, comma separated- do not sent back and additional words or styling."},
             {"role": "user", "content": f"Normalize this topic list: {topics}"}
         ]
     )

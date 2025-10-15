@@ -7,9 +7,9 @@ const recommendedTopics = [
 ];
 
 const lengthOptions = [
+  { label: "5 minutes", value: 5 },
   { label: "10 minutes", value: 10 },
-  { label: "20 minutes", value: 20 },
-  { label: "30 minutes", value: 30 },
+  { label: "15 minutes", value: 15 },
 ];
 
 export default function App() {
@@ -32,18 +32,49 @@ export default function App() {
     e.preventDefault();
     const allTopics = [...topics, ...customTopic.split(",").map(t => t.trim()).filter(Boolean)];
     if (!allTopics.length) return alert("Please select or enter at least one topic.");
-
+  
     setLoading(true);
     setProgress(["Starting generation..."]);
     setResult(null);
-
+  
     try {
-      const response = await generatePodcast(allTopics, length);
-      setResult(response);
-      setProgress(response.progress || []);
-    } catch (error) {
-      alert("Something went wrong. Check console for details.");
-      console.error(error);
+      const response = await fetch("http://127.0.0.1:8000/generate-stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topics: allTopics, length }),
+      });
+  
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder("utf-8");
+  
+      let fullScript = "";
+      let audioPath = "";
+  
+      while (true) {
+        const { done, value } = await reader!.read();
+        if (done) break;
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n\n").filter(Boolean);
+  
+        for (const line of lines) {
+          if (line.startsWith("data:")) {
+            const payload = JSON.parse(line.replace("data: ", ""));
+            if (payload.step) {
+              setProgress(prev => [...prev, payload.step]);
+            }
+            if (payload.done) {
+              fullScript = payload.script;
+              audioPath = payload.audio_path;
+            }
+            if (payload.error) throw new Error(payload.error);
+          }
+        }
+      }
+  
+      if (fullScript) setResult({ script: fullScript, audio_path: audioPath });
+    } catch (err) {
+      console.error("Streaming error:", err);
+      alert("Something went wrong during generation.");
     } finally {
       setLoading(false);
     }
@@ -115,7 +146,7 @@ export default function App() {
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-2 bg-blue-600 transition-all duration-500"
-              style={{ width: `${(progress.length / 4) * 100}%` }}
+              style={{ width: `${(progress.length / 6) * 100}%` }}
             />
           </div>
           <p className="text-sm text-gray-600 mt-2">

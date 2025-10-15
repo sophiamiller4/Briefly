@@ -9,7 +9,10 @@ def extractor(url_dict):
         for url in urls:
             try:
                 content = tavily.extract(url)
-                articles.append(content["results"][0]["raw_content"])
+                if content["results"]:
+                    articles.append(content["results"][0]["raw_content"])
+                else:
+                    print(f"Warning: No content extracted for URL: {url}")
             except Exception as e:
                 print("Error extracting:", e)
         extractions[topic] = articles
