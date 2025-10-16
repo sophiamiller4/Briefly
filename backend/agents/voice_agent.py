@@ -5,7 +5,6 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def voice_agent(script):
     try:
-        # Create the TTS response
         response = client.audio.speech.create(
             model="gpt-4o-mini-tts",
             voice="onyx",

@@ -6,9 +6,9 @@ from agents.retriever import retriever
 from agents.extractor import extractor
 from agents.summarizer import summarizer
 from agents.synthesizer import synthesizer
-from agents.voice_agent import voice_agent  # optional
+from agents.voice_agent import voice_agent
 
-def run_pipeline(topics, length):
+def run_pipeline(topics):
     # Route topics
     routed = topic_router(topics)
     # Retrieve URLs
@@ -18,7 +18,7 @@ def run_pipeline(topics, length):
     # Summarize
     summaries = summarizer(extracted)
     # Synthesize podcast script
-    script = synthesizer(summaries,topics, length)
+    script = synthesizer(summaries,topics)
     # Create voice output
     audio_path = voice_agent(script)
     return {"script": script, "audio_path": audio_path}

@@ -25,30 +25,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+if not os.path.exists("static"):
+    os.mkdir("static")
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 class TopicsRequest(BaseModel):
     topics: list[str]
-    length: int = 20
 
 #endpoint for creating podcast
 @app.post("/generate")
 async def generate(data: TopicsRequest):
     topics = data.topics
-    length = data.length
-    result = run_pipeline(topics, length)
+    result = run_pipeline(topics)
     return result
 
-
+#endpoint for creating podcast with streaming updates
 @app.post("/generate-stream")
 async def generate_stream(req: TopicsRequest):
     topics = req.topics
-    length = req.length
 
     async def event_generator():
         try:
-            yield f"data: {json.dumps({'step': 'Initializing search...'})}\n\n"
+            yield f"data: {json.dumps({'step': 'Compiling topics...'})}\n\n"
             await asyncio.sleep(0.1)
             routed = topic_router(topics)
 
@@ -56,13 +55,17 @@ async def generate_stream(req: TopicsRequest):
             await asyncio.sleep(0.1)
             news = retriever(routed)
 
+            yield f"data: {json.dumps({'step': 'Extracting insights from articles...'})}\n\n"
+            await asyncio.sleep(0.1)
+            extractions = extractor(news)
+
             yield f"data: {json.dumps({'step': 'Summarizing stories...'})}\n\n"
             await asyncio.sleep(0.1)
-            summaries = summarizer(news)
+            summaries = summarizer(extractions)
 
             yield f"data: {json.dumps({'step': 'Writing script...'})}\n\n"
             await asyncio.sleep(0.1)
-            script = synthesizer(summaries, routed, length)
+            script = synthesizer(summaries, routed)
 
             yield f"data: {json.dumps({'step': 'Generating podcast audio...'})}\n\n"
             await asyncio.sleep(0.1)

@@ -1,7 +1,9 @@
 # Briefly
-A personalized AI-powered podcast generator — users pick their interests and preferred podcast length, and the app creates a custom “Daily”-style audio summary of relevant news.
+
+A personalized AI-powered podcast generator — users pick their interests and the app creates a custom “The Daily”-style audio summary of relevant news.
 
 Built with:
+
 - **FastAPI** (Python backend)
 - **OpenAI + Tavily APIs** for news, summarization, and TTS
 - **React + TypeScript + Tailwind CSS** frontend
@@ -34,7 +36,7 @@ Built with:
 
 ## Setup Instructions
 
-###  Clone the repo
+### Clone the repo
 
 ```bash
 git clone https://github.com/<your-username>/<repo-name>.git
@@ -45,8 +47,8 @@ cd <repo-name>
 
 cd backend
 python -m venv venv
-source venv/bin/activate   # (on Mac/Linux)
-venv\Scripts\activate      # (on Windows)
+source venv/bin/activate # (on Mac/Linux)
+venv\Scripts\activate # (on Windows)
 
 pip install -r requirements.txt
 
@@ -60,6 +62,7 @@ uvicorn main:app --reload
 The server will start at http://127.0.0.1:8000
 
 ### Frontend Setup
+
 In a new terminal (keep backend running):
 cd frontend
 npm install

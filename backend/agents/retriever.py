@@ -10,6 +10,6 @@ def retriever(topics):
             query=topic,
             topic="news",
             max_results=5,
-            time_range="day")
+            days=1)
         results[topic] = [r["url"] for r in search["results"]]
     return results
