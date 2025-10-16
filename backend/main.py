@@ -34,14 +34,14 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 class TopicsRequest(BaseModel):
     topics: list[str]
 
-#endpoint for creating podcast
+#endpoint for creating podcast- not used in MVP but available if user doesn't want streaming
 @app.post("/generate")
 async def generate(data: TopicsRequest):
     topics = data.topics
     result = run_pipeline(topics)
     return result
 
-#endpoint for creating podcast with streaming updates
+#endpoint for creating podcast with streaming status updates
 @app.post("/generate-stream")
 async def generate_stream(req: TopicsRequest):
     topics = req.topics
