@@ -22,12 +22,14 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const noTopics = !topics.length && !customTopics.length;
 
+  //Add/remove topic pills from final list of topics
   const toggleTopic = (topic: string) => {
     setTopics((prev) =>
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic]
     );
   };
 
+  //Send request to backend with formatted topic list and interpret streaming response
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const allTopics = [

@@ -2,6 +2,7 @@ from tavily import TavilyClient
 import os
 tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
+#Extract content from search result urls using Taviy
 def extractor(url_dict):
     extractions = {}
     for topic, urls in url_dict.items():

@@ -2,6 +2,7 @@ from openai import OpenAI
 import os
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+#Summarize the extracted content- pulling out key article takeaways
 def summarizer(extracted):
     summaries = {}
     for topic, texts in extracted.items():

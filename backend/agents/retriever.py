@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import os
 tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
+#Use Tavily to search the web for recent news (past day) on each topic
 def retriever(topics):
     results = {}
     for topic in topics:

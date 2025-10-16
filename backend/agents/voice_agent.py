@@ -1,8 +1,8 @@
 from openai import OpenAI
 import os
-
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+#Turn the podcast script into an audio file
 def voice_agent(script):
     try:
         response = client.audio.speech.create(

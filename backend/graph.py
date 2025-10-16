@@ -8,6 +8,7 @@ from agents.summarizer import summarizer
 from agents.synthesizer import synthesizer
 from agents.voice_agent import voice_agent
 
+#Agent pipeline to perform each task chronologically 
 def run_pipeline(topics):
     # Route topics
     routed = topic_router(topics)

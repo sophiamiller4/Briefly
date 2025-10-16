@@ -45,6 +45,7 @@ cd <repo-name>
 
 ### Backend Setup
 
+```bash
 cd backend
 python -m venv venv
 source venv/bin/activate # (on Mac/Linux)
@@ -55,17 +56,22 @@ pip install -r requirements.txt
 create a .env file inside /backend with these contents:
 OPENAI_API_KEY=your_openai_key
 TAVILY_API_KEY=your_tavily_key
+```
 
 Run the backend:
+```bash
 uvicorn main:app --reload
+```
 
 The server will start at http://127.0.0.1:8000
 
 ### Frontend Setup
 
 In a new terminal (keep backend running):
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
 The frontend will start at http://localhost:5173

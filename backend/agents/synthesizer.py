@@ -2,6 +2,7 @@ from openai import OpenAI
 import os
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+#Turn the article summaries into a cohesive podcast script
 def synthesizer(summaries, topics):
     all_summaries = "\n".join([f"{topic}: {text}" for topic, text in summaries.items()])
     resp = client.chat.completions.create(
